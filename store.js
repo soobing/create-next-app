@@ -1,6 +1,6 @@
 import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createWrapper, HYDRATE } from "next-redux-wrapper";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const counterSlice = createSlice({
   name: "counter",
@@ -21,11 +21,13 @@ const userSlice = createSlice({
 
 const combinedReducers = combineReducers({
   counter: counterSlice.reducer,
-  user: userSlice.reducer
-})
+  user: userSlice.reducer,
+});
+
+const initialState = {counter: 200, user: 100};
 
 // create your reducer
-const reducer = (state = { counter: 10, user: 20}, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload };
@@ -34,18 +36,9 @@ const reducer = (state = { counter: 10, user: 20}, action) => {
   }
 };
 
+const makeStore = (context) => configureStore({
+  reducer,
+  enhancer: process.env.NODE_ENV === "production" ? compose() : composeWithDevTools(),
+});
 
-// create a makeStore function
-const makeStore = (context) => {
-  const middlewares = []; // 미들웨어들을 넣으면 된다.
-  const enhancer = process.env.NODE_ENV === 'production' ? 
-    compose(applyMiddleware(...middlewares)) : 
-        composeWithDevTools();
-const initialState = {};
-  return configureStore({
-    reducer,
-    initialState,
-    enhancer
-  });
-}
-export default makeStore;
+export const wrapper = createWrapper(makeStore, { debug: true });
