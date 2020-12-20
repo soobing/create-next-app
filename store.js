@@ -41,4 +41,4 @@ const makeStore = (context) => configureStore({
   enhancer: process.env.NODE_ENV === "production" ? compose() : composeWithDevTools(),
 });
 
-export const wrapper = createWrapper(makeStore, { debug: true });
+export const wrapper = createWrapper(makeStore, { debug: process.env.NODE_ENV !== "production" });
