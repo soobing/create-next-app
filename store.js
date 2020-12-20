@@ -24,10 +24,10 @@ const combinedReducers = combineReducers({
   user: userSlice.reducer,
 });
 
-const initialState = {counter: 200, user: 100};
 
 // create your reducer
-const reducer = (state = initialState, action) => {
+const reducer = (state, action) => {
+  console.log('root reducer', state, action)
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload };
@@ -36,9 +36,12 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+const initialState = { counter: 200, user: 100 };
+
 const makeStore = (context) => configureStore({
   reducer,
-  enhancer: process.env.NODE_ENV === "production" ? compose() : composeWithDevTools(),
+  preloadedState: initialState,
+  devTools: process.env.NODE_ENV === "production" ? compose() : composeWithDevTools(),
 });
 
 export const wrapper = createWrapper(makeStore, { debug: process.env.NODE_ENV !== "production" });
