@@ -1,15 +1,9 @@
 import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { composeWithDevTools } from "redux-devtools-extension";
+import counter from './counter';
 
-const counterSlice = createSlice({
-  name: "counter",
-  initialState: 0,
-  reducers: {
-    increment: (state) => state + 1,
-    decrement: (state) => state - 1,
-  },
-});
+
 const userSlice = createSlice({
   name: "user",
   initialState: 0,
@@ -20,7 +14,7 @@ const userSlice = createSlice({
 });
 
 const combinedReducers = combineReducers({
-  counter: counterSlice.reducer,
+  counter: counter,
   user: userSlice.reducer,
 });
 
