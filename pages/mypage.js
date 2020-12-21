@@ -10,6 +10,8 @@ function MyPage() {
   const counter = useSelector(
     state => state.counter
   )
+
+  console.log('counter', counter)
   const router = useRouter();
 
   return (
